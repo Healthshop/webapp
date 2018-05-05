@@ -79,7 +79,6 @@ namespace Oxford
                 return resultWords;
             }
 
-
             /// <summary>
             /// Gets the analysis of the specified image file by using the Computer Vision REST API.
             /// </summary>

@@ -43,10 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CuiEntities.cs" />
     <Compile Include="Similarity.cs" />
     <Compile Include="Member.cs" />
-    <Compile Include="CuiVector.cs" />
     <Compile Include="PlaceOfService.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Patient.cs" />
@@ -85,6 +83,10 @@
     <ProjectReference Include="..\CosineSimilarityApp\CosineSimilarityApp.csproj">
       <Project>{2D956090-0705-463D-843B-E34AA17227E9}</Project>
       <Name>CosineSimilarityApp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NLUclient\NLUclient.csproj">
+      <Project>{99356E88-2111-4742-9451-56E00CC5BCB6}</Project>
+      <Name>NLUclient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

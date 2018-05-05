@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CosineSimilarity;
+using NLUclient;
 
 namespace RankingAndRelevance
 {
