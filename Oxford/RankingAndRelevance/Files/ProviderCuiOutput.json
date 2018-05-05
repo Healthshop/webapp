@@ -1,0 +1,76 @@
+﻿{
+  "entities": [
+    {
+      "surface_form": "small",
+      "cui": "C0700321"
+    },
+    {
+      "surface_form": "incision",
+      "cui": "C0184898"
+    },
+    {
+      "surface_form": "phakoemulsification",
+      "cui": "C0282545"
+    },
+    {
+      "surface_form": "cataract surgery",
+      "cui": "C0007389"
+    },
+    {
+      "surface_form": "procedures",
+      "cui": "C0184661"
+    },
+    {
+      "surface_form": "small",
+      "cui": "C0700321"
+    },
+    {
+      "surface_form": "eyelid anomaly",
+      "cui": "C1404179"
+    },
+    {
+      "surface_form": "chalazion excision",
+      "cui": "C0176144"
+    },
+    {
+      "surface_form": "laser surgical procedures",
+      "cui": "C0023087"
+    },
+    {
+      "surface_form": "secondary cataracts",
+      "cui": "C1306068"
+    },
+    {
+      "surface_form": "laser surgical procedures",
+      "cui": "C0181549"
+    },
+    {
+      "surface_form": "glaucoma",
+      "cui": "C0017601"
+    },
+    {
+      "surface_form": "glaucoma",
+      "cui": "C1962986"
+    },
+    {
+      "surface_form": "cataract surgery",
+      "cui": "C0007389"
+    },
+    {
+      "surface_form": "cataract surgery",
+      "cui": "C2939459"
+    },
+    {
+      "surface_form": "glaucoma",
+      "cui": "C0017601"
+    },
+    {
+      "surface_form": "glaucoma",
+      "cui": "C1962986"
+    },
+    {
+      "surface_form": "diabetic care",
+      "cui": "C0150544"
+    }
+  ]
+}

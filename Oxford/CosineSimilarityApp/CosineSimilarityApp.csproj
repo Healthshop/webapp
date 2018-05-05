@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AE76F5C9-2BD2-4F89-A73C-5EFA220383F6}</ProjectGuid>
+    <ProjectGuid>{2D956090-0705-463D-843B-E34AA17227E9}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RankingAndRelevance</RootNamespace>
-    <AssemblyName>RankingAndRelevance</AssemblyName>
+    <RootNamespace>CosineSimilarityApp</RootNamespace>
+    <AssemblyName>CosineSimilarityApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,7 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,53 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CuiEntities.cs" />
-    <Compile Include="Similarity.cs" />
-    <Compile Include="Member.cs" />
-    <Compile Include="CuiVector.cs" />
-    <Compile Include="PlaceOfService.cs" />
-    <Compile Include="Provider.cs" />
-    <Compile Include="Patient.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="CosineSimilairityProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Files\cui2vec_pretrained.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\Provider.tsv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\PlaceOfService.tsv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\Member.tsv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\Patient.tsv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Files\PatientCuiOutput.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\ProviderCuiOutput.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Content Include="Files\ProviderDescriptionInput.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\PatientOcrInput.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CosineSimilarityApp\CosineSimilarityApp.csproj">
-      <Project>{2D956090-0705-463D-843B-E34AA17227E9}</Project>
-      <Name>CosineSimilarityApp</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

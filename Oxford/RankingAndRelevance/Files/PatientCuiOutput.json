@@ -1,0 +1,172 @@
+﻿{
+	"entities": [
+		{
+			"surface_form": "foveal thickness",
+			"cui": "C4067878"
+		},
+		{
+			"surface_form": "od",
+			"cui": "C0439164"
+		},
+		{
+			"surface_form": "od",
+			"cui": "C3665488"
+		},
+		{
+			"surface_form": "foveal thickness",
+			"cui": "C4067878"
+		},
+		{
+			"surface_form": "os",
+			"cui": "C0393706"
+		},
+		{
+			"surface_form": "plan",
+			"cui": "C0270724"
+		},
+		{
+			"surface_form": "impression",
+			"cui": "C4049863"
+		},
+		{
+			"surface_form": "discussion",
+			"cui": "C0557061"
+		},
+		{
+			"surface_form": "rhegmatogenous retinal detachment",
+			"cui": "C0271055"
+		},
+		{
+			"surface_form": "subretinal fluid",
+			"cui": "C1720732"
+		},
+		{
+			"surface_form": "scleral buckle",
+			"cui": "C0183175"
+		},
+		{
+			"surface_form": "treat",
+			"cui": "C0087111"
+		},
+		{
+			"surface_form": "prevent",
+			"cui": "C0309872"
+		},
+		{
+			"surface_form": "pvr",
+			"cui": "C0242852"
+		},
+		{
+			"surface_form": "pvr",
+			"cui": "C0456261"
+		},
+		{
+			"surface_form": "epiretinal membrane",
+			"cui": "C0339543"
+		},
+		{
+			"surface_form": "staged",
+			"cui": "C3846398"
+		},
+		{
+			"surface_form": "scleral buckle procedure",
+			"cui": "C0036411"
+		},
+		{
+			"surface_form": "small",
+			"cui": "C0700321"
+		},
+		{
+			"surface_form": "peel",
+			"cui": "C0237849"
+		},
+		{
+			"surface_form": "29",
+			"cui": "C3843708"
+		},
+		{
+			"surface_form": "small face",
+			"cui": "C1855538"
+		},
+		{
+			"surface_form": "day 4",
+			"cui": "C3840892"
+		},
+		{
+			"surface_form": "positioning",
+			"cui": "C0150305"
+		},
+		{
+			"surface_form": "subretinal fluid",
+			"cui": "C1720732"
+		},
+		{
+			"surface_form": "resolution",
+			"cui": "C1706463"
+		},
+		{
+			"surface_form": "scotoma",
+			"cui": "C0036454"
+		},
+		{
+			"surface_form": "scotoma",
+			"cui": "C3887875"
+		},
+		{
+			"surface_form": "related",
+			"cui": "C0445223"
+		},
+		{
+			"surface_form": "rhegmatogenous retinal detachment",
+			"cui": "C0271055"
+		},
+		{
+			"surface_form": "limited",
+			"cui": "C2674459"
+		},
+		{
+			"surface_form": "plan",
+			"cui": "C0270724"
+		},
+		{
+			"surface_form": "dilated",
+			"cui": "C0700124"
+		},
+		{
+			"surface_form": "3",
+			"cui": "C0439086"
+		},
+		{
+			"surface_form": "3",
+			"cui": "C2827736"
+		},
+		{
+			"surface_form": "3",
+			"cui": "C3838680"
+		},
+		{
+			"surface_form": "high myopia",
+			"cui": "C0271183"
+		},
+		{
+			"surface_form": "follow up",
+			"cui": "C0589120"
+		},
+		{
+			"surface_form": "29",
+			"cui": "C3843708"
+		},
+		{
+			"surface_form": "scleral buckle",
+			"cui": "C0183175"
+		},
+		{
+			"surface_form": "medications",
+			"cui": "C0013227"
+		},
+		{
+			"surface_form": "medical history",
+			"cui": "C0262926"
+		}
+	]
+}

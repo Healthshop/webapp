@@ -14,3 +14,8 @@
 *.txt
 *.dll
 *.pdb
+/Oxford/CosineSimilarity/bin/Debug/netcoreapp2.0
+/Oxford/CosineSimilarity/obj
+/Oxford/CosineSimilarityApp/obj/Debug
+/Oxford/CosineSimilarityApp/bin/Debug
+/Oxford/.vs/config

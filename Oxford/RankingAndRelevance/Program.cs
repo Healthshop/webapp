@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using CosineSimilarity;
 
 namespace RankingAndRelevance
 {
@@ -16,25 +19,96 @@ namespace RankingAndRelevance
             //http://ec2-52-14-191-192.us-east-2.compute.amazonaws.com:1234/ 
             //https://arxiv.org/abs/1804.01486 
             //This tab displays an interactive t-sne visualization of all 108,477 concepts. 
-            List<CuiVector> Cuis = ReadCuiVector("Files\\cui2vec_pretrained.csv");
+            Dictionary<string, double[]> cuisDictionary = ReadCuiVector("Files\\cui2vec_pretrained.csv");
             DateTime dt2 = DateTime.Now;
             TimeSpan duration = dt2.Subtract(dt);
             Console.WriteLine("Seconds to load: " + duration.TotalSeconds);
 
-            string cuiInput =
-                @"{ ""entities"": [{ ""surface_form"": ""Vitrectomy"",""cui"": ""C0042903""}, { ""surface_form"": ""Scleral Buckling"", ""cui"": ""C0036411""}]}";
-            //string cuiInput = @"{ ""entities"": [ { ""Vitrectomy"": ""C0042903""},{ ""Scleral Buckling"": ""C0036411""}]}";
-            CuiEntities cuiEntities = CuiEntities.ReadToObject(cuiInput);
-            foreach (var cuiEntitiesEntity in cuiEntities.entities)
+            string providerDescriptionInputText = File.ReadAllText("Files\\ProviderDescriptionInput.txt");
+            string providerCuiOuput = File.ReadAllText("Files\\ProviderCuiOutput.json");
+
+            //string cuiUserInput = @"{ ""entities"": [{ ""surface_form"": ""Vitrectomy"",""cui"": ""C0042903""}, { ""surface_form"": ""Scleral Buckling"", ""cui"": ""C0036411""}]}";
+            string patientDescriptionInputText = File.ReadAllText("Files\\PatientOcrInput.txt");
+            string patientCuiOuput = File.ReadAllText("Files\\PatientCuiOutput.json");
+
+            CuiEntities providerCuiEntities = CuiEntities.ReadToObject(providerCuiOuput);
+            CuiEntities patientCuiEntities = CuiEntities.ReadToObject(patientCuiOuput);
+            List<string> surfaces = new List<string>();
+
+            List<Similarity> similarities = RankSimilarities(providerCuiEntities, patientCuiEntities, cuisDictionary);
+            similarities.Reverse();
+            var topFiveResults = similarities.Take(10);
+            StringBuilder sb = new StringBuilder();
+            foreach (Similarity similarity in topFiveResults)
             {
-                string cui = cuiEntitiesEntity.cui;
-                string surfaceForm = cuiEntitiesEntity.surface_form;
+                string text = $"Provider Surface Form: {similarity.ProviderSurfaceForm} Patient Surface Form: {similarity.PatientSurfaceForm}";
+                sb.Append(text);
             }
+            Console.Write(sb.ToString());
         }
 
-        private static List<CuiVector> ReadCuiVector(string path)
+        private static List<Similarity> RankSimilarities(
+            CuiEntities providerCuiEntities, CuiEntities patientCuiEntities, Dictionary<string, double[]> cuisDictionary)
         {
-            List <CuiVector> cuiVectors = new List<CuiVector>();
+            List<Similarity> cosineSimilarites = new List<Similarity>();
+            foreach (Entity providerCuiEntity in providerCuiEntities.entities)
+            {
+                if (providerCuiEntity == null) continue;
+                foreach (var patientCuiEntity in patientCuiEntities.entities)
+                {
+                    if (patientCuiEntity == null) continue;
+
+                    string providerCuiEntityCui = providerCuiEntity.cui;
+                    string providerSurfaceForm = providerCuiEntity.surface_form;
+
+                    string patientCuiEntityCui = patientCuiEntity.cui;
+                    string patientSurfaceForm = patientCuiEntity.surface_form;
+
+                    double[] providerVector;
+                    if (cuisDictionary.TryGetValue(providerCuiEntityCui, out providerVector))
+                    {
+                        double[] patientVector;
+                        if (cuisDictionary.TryGetValue(patientCuiEntityCui, out patientVector))
+                        {
+                            double similarity = CosineSimilairityProgram.CalculateCosineSimilarity(patientVector, providerVector);
+                            Similarity s = new Similarity
+                            {
+                                Rank = similarity,
+                                PatientSurfaceForm = patientSurfaceForm,
+                                ProviderSurfaceForm = providerSurfaceForm,
+                            };
+
+                            cosineSimilarites.Add(s);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Patient CUI not found: {patientCuiEntityCui} surfaceForm: {patientSurfaceForm}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Provider CUI not found: {providerCuiEntityCui} surfaceForm: {providerSurfaceForm}");
+                    }
+                }
+            }
+
+            // This shows calling the Sort(Comparison(T) overload using 
+            // an anonymous method for the Comparison delegate. 
+            // This method treats null as the lesser of two values.
+            cosineSimilarites.Sort(delegate (Similarity x, Similarity y)
+            {
+                if (x.Rank == null && y.Rank == null) return 0;
+                else if (x.Rank == null) return -1;
+                else if (y.Rank == null) return 1;
+                else return x.Rank.CompareTo(y.Rank);
+            });
+
+            return cosineSimilarites;
+        }
+
+        private static Dictionary<string, double[]> ReadCuiVector(string path)
+        {
+            Dictionary<string, double[]> cuiVectors = new Dictionary<string, double[]>();
             int lineCounter = 0;
             foreach (string line in File.ReadLines(path))
             {
@@ -44,20 +118,22 @@ namespace RankingAndRelevance
                     continue; //skip header
                 }
                 string[] values = line.Split(',');
-                CuiVector cui = new CuiVector();
+                string cui = string.Empty;
+                List<double> vector = new List<double>();
+
                 for (int i = 0; i < values.Length; i++)
                 {
                     string value = values[i].Trim('\"');
                     //Trim values
                     if (i == 0)
                     {
-                        cui.Cui = value;
+                        cui = value;
                         continue;
                     }
-                    cui.Vector.Add(double.Parse(value));
+                    vector.Add(double.Parse(value));
                 }
 
-                cuiVectors.Add(cui);
+                cuiVectors.Add(cui, vector.ToArray());
             }
             return cuiVectors;
         }
