@@ -72,18 +72,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Files\PatientOcrInput.txt" />
+    <Content Include="Files\ProviderDescriptionInput.txt" />
     <None Include="Files\PatientCuiOutput.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Files\ProviderCuiOutput.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Files\ProviderDescriptionInput.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\PatientOcrInput.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CosineSimilarityApp\CosineSimilarityApp.csproj">
