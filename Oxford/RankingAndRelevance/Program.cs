@@ -24,6 +24,7 @@ namespace RankingAndRelevance
             TimeSpan duration = dt2.Subtract(dt);
             Console.WriteLine("Seconds to load: " + duration.TotalSeconds);
 
+            DateTime dt1 = DateTime.Now;
             string providerDescriptionInputText = File.ReadAllText("Files\\ProviderDescriptionInput.txt");
             string providerCuiOuput = File.ReadAllText("Files\\ProviderCuiOutput.json");
 
@@ -39,12 +40,21 @@ namespace RankingAndRelevance
             similarities.Reverse();
             var topFiveResults = similarities.Take(10);
             StringBuilder sb = new StringBuilder();
+            HashSet<string> h = new HashSet<string>();
             foreach (Similarity similarity in topFiveResults)
             {
-                string text = $"Provider Surface Form: {similarity.ProviderSurfaceForm} Patient Surface Form: {similarity.PatientSurfaceForm}";
-                sb.Append(text);
+                string text = $"Provider Surface Form: {similarity.ProviderSurfaceForm} Patient Surface Form: {similarity.PatientSurfaceForm} ";
+                if (!h.Contains(text))
+                {
+                    sb.AppendLine(text);
+                    h.Add(text);
+                }
             }
-            Console.Write(sb.ToString());
+            Console.WriteLine(sb.ToString());
+
+            DateTime dt3 = DateTime.Now;
+            TimeSpan duration2 = dt3.Subtract(dt1);
+            Console.WriteLine("Seconds to rank: " + duration2.TotalSeconds);
         }
 
         private static List<Similarity> RankSimilarities(
