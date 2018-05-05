@@ -43,12 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbContext.cs" />
     <Compile Include="Similarity.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="PlaceOfService.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Patient.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Ranker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,7 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Files\PatientOcrInput.txt" />
-    <Content Include="Files\ProviderDescriptionInput.txt" />
     <None Include="Files\PatientCuiOutput.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

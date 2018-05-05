@@ -8,59 +8,69 @@ using NLUclient;
 
 namespace RankingAndRelevance
 {
-    class Program
+    public class Ranker
     {
         static void Main()
         {
-            DateTime dt = DateTime.Now;
-            List<Patient> patients = ReadPatients("Files\\Patient.tsv");
-            List<Member> members = ReadMembers("Files\\Member.tsv");
-            List<PlaceOfService> placeOfServices = ReadPlaceOfService("Files\\PlaceOfService.tsv");
-            List<Provider> providers = ReadProviders("Files\\Provider.tsv");
-            //http://ec2-52-14-191-192.us-east-2.compute.amazonaws.com:1234/ 
-            //https://arxiv.org/abs/1804.01486 
-            //This tab displays an interactive t-sne visualization of all 108,477 concepts. 
-            Dictionary<string, double[]> cuisDictionary = ReadCuiVector("Files\\cui2vec_pretrained.csv");
-            DateTime dt2 = DateTime.Now;
-            TimeSpan duration = dt2.Subtract(dt);
-            Console.WriteLine("Seconds to load: " + duration.TotalSeconds);
+            Dictionary<string, double[]> cuisDictionary = LoadData();
 
             DateTime dt1 = DateTime.Now;
-            string providerDescriptionInputText = File.ReadAllText("Files\\ProviderDescriptionInput.txt");
-            string providerCuiOuput = File.ReadAllText("Files\\ProviderCuiOutput.json");
+            string providerDescriptionInputText = "Small-incision phacoemulsification cataract surgery, minor in-office procedures including small eyelid anomalies and chalazion excisions and laser surgical procedures for secondary cataracts, glaucoma and diabetic complications Special Interests General ophthalmology including cataract surgery, glaucoma and diabetic care.";
+            CuiEntities providerCuiEntities = NuClient.ExtractCuiEntities(providerDescriptionInputText); //235 entities
+            string patientDescriptionInputText = "Testinq OCT: OD central foveal thickness 200 um nl foveal contour. No SRF/lntraretinal Fluid OS central foveal thickness 166 um nl foveal contour. Pseudohole with ERM, developed after 12/6/17 laser Impression/Plan and Discussion 1 Rhegmatogenous Retinal detachment left eye. sip barricade laser around subretinal fluid. Irecommend that we proceed with scleral buckle to treat detachment and prevent futher posterior PVR (epiretinal membrane) from developing. I discussed staged procedure with scleral buckle with small gas bubble initially, and possible membrane peel in the future. I recommend that we proceed with surgery 12/29/17 with buckle and small gas bubble with 3-4 days of face down positioning to help With resolution of macular subretinal fluid. I discussed that it is unclear whether her scotoma is related to the detachment or the laser, but that fixing the detachment will minimize the progression of ERM 2. Limited peripheral rhegmatogenous retinal detachment right eye. sip laser barricade 12/6/17. No further tears noted. plan dilated exam OD at the time of surgery OS. 3. High myopia both eyes. The clinical findings noted were reviewed in detail. Printed information was provided. The patient expressed an understanding of this explanation and further expressed a desire to proceed in the manner outlined. Follow up scheduled for 12.29.17 cryo, scleral buckle with gas left eye. Allerqies. Medications and Problem list Problems Medical History: None Allerqies";
+            CuiEntities patientCuiEntities = NuClient.ExtractCuiEntities(patientDescriptionInputText); //270 entities
 
-            //string cuiUserInput = @"{ ""entities"": [{ ""surface_form"": ""Vitrectomy"",""cui"": ""C0042903""}, { ""surface_form"": ""Scleral Buckling"", ""cui"": ""C0036411""}]}";
-            string patientDescriptionInputText = File.ReadAllText("Files\\PatientOcrInput.txt");
-            string patientCuiOuput = File.ReadAllText("Files\\PatientCuiOutput.json");
+            StringBuilder sb = ExtractSimilarities(providerCuiEntities, patientCuiEntities, cuisDictionary);
+            Console.WriteLine(sb.ToString());
 
-            CuiEntities providerCuiEntities = CuiEntities.ReadToObject(providerCuiOuput);
-            CuiEntities patientCuiEntities = CuiEntities.ReadToObject(patientCuiOuput);
-            List<string> surfaces = new List<string>();
+            DateTime dt3 = DateTime.Now;
+            TimeSpan duration2 = dt3.Subtract(dt1);
+            Console.WriteLine($"Seconds to rank: {duration2.TotalSeconds}");
+        }
 
+        private static StringBuilder ExtractSimilarities(CuiEntities providerCuiEntities, CuiEntities patientCuiEntities,
+            Dictionary<string, double[]> cuisDictionary)
+        {
             List<Similarity> similarities = RankSimilarities(providerCuiEntities, patientCuiEntities, cuisDictionary);
             similarities.Reverse();
-            var topFiveResults = similarities.Take(10);
+            IEnumerable<Similarity> topFiveResults = similarities.Take(10);
             StringBuilder sb = new StringBuilder();
             HashSet<string> h = new HashSet<string>();
             foreach (Similarity similarity in topFiveResults)
             {
-                string text = $"Provider Surface Form: {similarity.ProviderSurfaceForm} Patient Surface Form: {similarity.PatientSurfaceForm} ";
+                string text =
+                    $"Provider Surface Form: {similarity.ProviderSurfaceForm} Patient Surface Form: {similarity.PatientSurfaceForm} ";
                 if (!h.Contains(text))
                 {
                     sb.AppendLine(text);
                     h.Add(text);
                 }
             }
-            Console.WriteLine(sb.ToString());
-
-            DateTime dt3 = DateTime.Now;
-            TimeSpan duration2 = dt3.Subtract(dt1);
-            Console.WriteLine("Seconds to rank: " + duration2.TotalSeconds);
+            return sb;
         }
 
-        private static List<Similarity> RankSimilarities(
-            CuiEntities providerCuiEntities, CuiEntities patientCuiEntities, Dictionary<string, double[]> cuisDictionary)
+        private static Dictionary<string, double[]> LoadData()
         {
+            DateTime dt = DateTime.Now;
+            List<Patient> patients = ReadPatients("Files\\Patient.tsv"); //280 patients
+            List<Member> members = ReadMembers("Files\\Member.tsv"); //280 members
+            List<PlaceOfService> placeOfServices = ReadPlaceOfService("Files\\PlaceOfService.tsv"); //70 places
+            List<Provider> providers = ReadProviders("Files\\Provider.tsv"); //191 provider
+            //http://ec2-52-14-191-192.us-east-2.compute.amazonaws.com:1234/ 
+            //https://arxiv.org/abs/1804.01486 
+            //This tab displays an interactive t-sne visualization of all 108,477 concepts. 
+            Dictionary<string, double[]> cuisDictionary = ReadCuiVector("Files\\cui2vec_pretrained.csv"); //109053 CUI entities 
+            DateTime dt2 = DateTime.Now;
+            TimeSpan duration = dt2.Subtract(dt);
+            Console.WriteLine("Seconds to load: " + duration.TotalSeconds);
+            return cuisDictionary;
+        }
+
+        private static List<Similarity> RankSimilarities(CuiEntities providerCuiEntities, 
+            CuiEntities patientCuiEntities, 
+            Dictionary<string, double[]> cuisDictionary)
+        {
+            HashSet<string> uniqueSimilarities = new HashSet<string>();
             List<Similarity> cosineSimilarites = new List<Similarity>();
             foreach (Entity providerCuiEntity in providerCuiEntities.entities)
             {
@@ -81,6 +91,11 @@ namespace RankingAndRelevance
                         double[] patientVector;
                         if (cuisDictionary.TryGetValue(patientCuiEntityCui, out patientVector))
                         {
+                            string uniqueIds = $"{providerCuiEntityCui} {patientCuiEntityCui}";
+                            if (uniqueSimilarities.Contains(uniqueIds))
+                                continue;
+                            uniqueSimilarities.Add(uniqueIds);
+
                             double similarity = CosineSimilairityProgram.CalculateCosineSimilarity(patientVector, providerVector);
                             Similarity s = new Similarity
                             {
@@ -106,13 +121,7 @@ namespace RankingAndRelevance
             // This shows calling the Sort(Comparison(T) overload using 
             // an anonymous method for the Comparison delegate. 
             // This method treats null as the lesser of two values.
-            cosineSimilarites.Sort(delegate (Similarity x, Similarity y)
-            {
-                if (x.Rank == null && y.Rank == null) return 0;
-                else if (x.Rank == null) return -1;
-                else if (y.Rank == null) return 1;
-                else return x.Rank.CompareTo(y.Rank);
-            });
+            cosineSimilarites.Sort((x, y) => x.Rank.CompareTo(y.Rank));
 
             return cosineSimilarites;
         }

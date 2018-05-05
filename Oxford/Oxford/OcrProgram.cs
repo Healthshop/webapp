@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Oxford
+﻿namespace Oxford
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +8,7 @@ namespace Oxford
     using System.Net.Http.Headers;
     using System.Text;
     using System.Runtime.Serialization.Json;
+    using System.Net;
 
     namespace CSHttpClientSample
     {

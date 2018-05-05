@@ -5,6 +5,17 @@ namespace RankingAndRelevance
 {
     public class Similarity : IEquatable<Similarity>, IComparable<Similarity>
     {
+        public Similarity(string patientSurfaceForm, string providerSurfaceForm, double rank)
+        {
+            PatientSurfaceForm = patientSurfaceForm;
+            ProviderSurfaceForm = providerSurfaceForm;
+            Rank = rank;
+        }
+
+        public Similarity()
+        {
+        }
+
         /// <summary>
         /// C0000052
         /// </summary>
@@ -43,7 +54,6 @@ namespace RankingAndRelevance
             // A null value means that this object is greater.
             if (compareSimilarity == null)
                 return 1;
-
             else
                 return this.Rank.CompareTo(compareSimilarity.Rank);
         }
