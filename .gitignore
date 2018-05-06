@@ -53,3 +53,6 @@
 /Oxford/ProviderMatcher/obj/Debug
 /Oxford/ProviderMatcher/obj/Release
 /Oxford/ProviderMatcher/obj
+*.DS_Store
+/Oxford/WepApi/bin/Release/netcoreapp2.0
+/web_final-master
