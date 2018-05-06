@@ -271,27 +271,27 @@ namespace RankingAndRelevance
                 }
 
                 string[] columns = line.Split('\t');
-                string prvIdn = columns[0];
-                string providerNpi = columns[1];
-                string effectiveDt = columns[2];
-                string termDt = columns[3];
-                string facilityName = columns[4];
-                string lastName = columns[5];
-                string firstName = columns[6];
-                string middleName = columns[7];
-                string suffixName = columns[8];
-                string providerSpecialityCode = columns[9];
-                string providerSpecialityDesc = columns[10];
-                string providerCity = columns[11];
-                string providerCounty = columns[12];
-                string providerState = columns[13];
-                string deaNumber = columns[14];
-                string stateLicense = columns[15];
-                string taxId = columns[16];
-                string createTimestamp = columns[17];
-                string modifyTimestamp = columns[18];
-                string keywords = columns[19];
-                string price = columns[20];
+                string prvIdn = columns[1];
+                string providerNpi = columns[2];
+                string effectiveDt = columns[3];
+                string termDt = columns[4];
+                string facilityName = columns[5];
+                string lastName = columns[6];
+                string firstName = columns[7];
+                string middleName = columns[8];
+                string suffixName = columns[9];
+                string providerSpecialityCode = columns[10];
+                string providerSpecialityDesc = columns[11];
+                string providerCity = columns[12];
+                string providerCounty = columns[13];
+                string providerState = columns[14];
+                string deaNumber = columns[15];
+                string stateLicense = columns[16];
+                string taxId = columns[17];
+                string createTimestamp = columns[18];
+                string modifyTimestamp = columns[19];
+                string keywords = columns[20];
+                string price = columns[21];
 
                 Provider p = new Provider
                 {
