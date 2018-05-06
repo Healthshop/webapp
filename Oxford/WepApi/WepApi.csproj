@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Oxford\Oxford.csproj" />
+    <ProjectReference Include="..\OxfordOCR\OxfordOCR.csproj" />
     <ProjectReference Include="..\RankingAndRelevance\RankingAndRelevance.csproj" />
   </ItemGroup>
 

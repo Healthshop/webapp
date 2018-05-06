@@ -4747,6 +4747,24 @@
           "lib/netstandard1.3/Microsoft.WindowsAzure.Storage.dll": {}
         }
       },
+      "CosineSimilarityApp/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/CosineSimilarityApp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CosineSimilarityApp.dll": {}
+        }
+      },
+      "NLUclient/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/NLUclient.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NLUclient.dll": {}
+        }
+      },
       "Oxford/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.0",
@@ -4762,6 +4780,10 @@
       },
       "RankingAndRelevance/1.0.0": {
         "type": "project",
+        "dependencies": {
+          "CosineSimilarityApp": "1.0.0",
+          "NLUclient": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/RankingAndRelevance.dll": {}
         },
@@ -12549,6 +12571,16 @@
         "windowsazure.storage.8.1.4.nupkg.sha512",
         "windowsazure.storage.nuspec"
       ]
+    },
+    "CosineSimilarityApp/1.0.0": {
+      "type": "project",
+      "path": "../CosineSimilarityApp/CosineSimilarityApp.csproj",
+      "msbuildProject": "../CosineSimilarityApp/CosineSimilarityApp.csproj"
+    },
+    "NLUclient/1.0.0": {
+      "type": "project",
+      "path": "../NLUclient/NLUclient.csproj",
+      "msbuildProject": "../NLUclient/NLUclient.csproj"
     },
     "Oxford/1.0.0": {
       "type": "project",
