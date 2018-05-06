@@ -4765,17 +4765,13 @@
           "bin/placeholder/NLUclient.dll": {}
         }
       },
-      "Oxford/1.0.0": {
+      "OxfordOCR/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v2.0",
-        "dependencies": {
-          "Microsoft.NETCore.App": "2.0.0"
-        },
         "compile": {
-          "bin/placeholder/Oxford.dll": {}
+          "bin/placeholder/OxfordOCR.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Oxford.dll": {}
+          "bin/placeholder/OxfordOCR.dll": {}
         }
       },
       "RankingAndRelevance/1.0.0": {
@@ -12582,10 +12578,10 @@
       "path": "../NLUclient/NLUclient.csproj",
       "msbuildProject": "../NLUclient/NLUclient.csproj"
     },
-    "Oxford/1.0.0": {
+    "OxfordOCR/1.0.0": {
       "type": "project",
-      "path": "../Oxford/Oxford.csproj",
-      "msbuildProject": "../Oxford/Oxford.csproj"
+      "path": "../OxfordOCR/OxfordOCR.csproj",
+      "msbuildProject": "../OxfordOCR/OxfordOCR.csproj"
     },
     "RankingAndRelevance/1.0.0": {
       "type": "project",
@@ -12595,9 +12591,11 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
+      "CosineSimilarityApp >= 1.0.0",
       "Microsoft.AspNetCore.All >= 2.0.6",
       "Microsoft.NETCore.App >= 2.0.0",
-      "Oxford >= 1.0.0",
+      "NLUclient >= 1.0.0",
+      "OxfordOCR >= 1.0.0",
       "RankingAndRelevance >= 1.0.0"
     ]
   },
@@ -12633,8 +12631,14 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\Oxford\\Oxford.csproj": {
-              "projectPath": "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\Oxford\\Oxford.csproj"
+            "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\CosineSimilarityApp\\CosineSimilarityApp.csproj": {
+              "projectPath": "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\CosineSimilarityApp\\CosineSimilarityApp.csproj"
+            },
+            "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\NLUclient\\NLUclient.csproj": {
+              "projectPath": "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\NLUclient\\NLUclient.csproj"
+            },
+            "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\OxfordOCR\\OxfordOCR.csproj": {
+              "projectPath": "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\OxfordOCR\\OxfordOCR.csproj"
             },
             "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\RankingAndRelevance\\RankingAndRelevance.csproj": {
               "projectPath": "C:\\Users\\Agafo\\Dropbox\\Startup\\GoVertical\\webapp\\Oxford\\RankingAndRelevance\\RankingAndRelevance.csproj"

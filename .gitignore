@@ -49,3 +49,7 @@
 /Oxford/WebApi/obj
 /Oxford/Cui2VecSubmitter/obj
 /Oxford/Cui2VecSubmitter/cui2vec_pretrained.csv
+/Oxford/Cui2VecSubmitter/bin/Release
+/Oxford/ProviderMatcher/obj/Debug
+/Oxford/ProviderMatcher/obj/Release
+/Oxford/ProviderMatcher/obj

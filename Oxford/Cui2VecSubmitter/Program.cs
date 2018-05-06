@@ -8,7 +8,7 @@ namespace Cui2VecSubmitter
         static void Main(string[] args)
         {
             string cui2Vec = "cui2vec_pretrained.csv";
-            Dictionary<string, double[]> cuisDictionary = ReadCuiVector("Files\\cui2vec_pretrained.csv"); //109053 CUI entities
+            Dictionary<string, double[]> cuisDictionary = ReadCuiVector(cui2Vec); //109053 CUI entities
             //TODO upload to blob
         }
 
