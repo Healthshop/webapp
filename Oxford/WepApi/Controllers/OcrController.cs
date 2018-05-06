@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Oxford.CSHttpClientSample;
 
 namespace WepApi.Controllers
 {
@@ -36,11 +35,11 @@ namespace WepApi.Controllers
         public string GetText(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) return "url cannot be empty";
-            string result = OcrProgram.MakeAnalysisRequest(url);
+            string result = OxfordOCR.OcrProgram.MakeAnalysisRequest(url);
             if (result == "Bad Request") throw new ApplicationException("Bad request");
 
-            List<string> resultWords = OcrProgram.ExtractWords(result);
-            string fullText = OcrProgram.DisplayWords(resultWords);
+            List<string> resultWords = OxfordOCR.OcrProgram.ExtractWords(result);
+            string fullText = OxfordOCR.OcrProgram.DisplayWords(resultWords);
             if(string.IsNullOrWhiteSpace(fullText)) throw new ApplicationException("No text on image was recognized");
             return fullText;
         }
