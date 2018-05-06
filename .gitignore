@@ -47,3 +47,5 @@
 /Oxford/WepApi/bin/Release/netcoreapp2.0/Files
 /Oxford/RankingAndRelevance/obj/Release
 /Oxford/WebApi/obj
+/Oxford/Cui2VecSubmitter/obj
+/Oxford/Cui2VecSubmitter/cui2vec_pretrained.csv
