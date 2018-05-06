@@ -17,8 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CosineSimilarityApp\CosineSimilarityApp.csproj" />
+    <ProjectReference Include="..\NLUclient\NLUclient.csproj" />
     <ProjectReference Include="..\OxfordOCR\OxfordOCR.csproj" />
     <ProjectReference Include="..\RankingAndRelevance\RankingAndRelevance.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Provider.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
