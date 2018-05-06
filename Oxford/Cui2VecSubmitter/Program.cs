@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Cui2VecSubmitter
 {
@@ -8,7 +11,41 @@ namespace Cui2VecSubmitter
         static void Main(string[] args)
         {
             string cui2Vec = "cui2vec_pretrained.csv";
+            var filter = File.ReadAllText("Filter.txt");
+            var f = filter.Split(',').ToList();
+            HashSet<string> h = new HashSet<string>();
+            char[] whitespace = new char[] { ' ', '\t' };
+
+            foreach (var s in f)
+            {
+                var ssizes = s.Split(whitespace, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var sz in ssizes)
+                {
+                    h.Add(sz);
+                }
+            }
+
+
             Dictionary<string, double[]> cuisDictionary = ReadCuiVector(cui2Vec); //109053 CUI entities
+            StringBuilder sb = new StringBuilder();
+            List<string> list = new List<string>();
+            foreach (var cuis in cuisDictionary)
+            {
+                if (h.Contains(cuis.Key))
+                {
+                    sb.Append(cuis.Key);
+                    sb.Append(',');
+                    foreach (var d in cuis.Value)
+                    {
+                        sb.Append(d);
+                        sb.Append(',');
+                    }
+                    list.Add(sb.ToString());
+                    sb.Clear();
+                }
+            }
+            File.AppendAllLines(@"Filtered.csv", list);
+
             //TODO upload to blob
         }
 

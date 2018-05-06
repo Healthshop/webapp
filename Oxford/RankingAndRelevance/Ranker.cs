@@ -10,32 +10,50 @@ namespace RankingAndRelevance
 {
     public class Ranker
     {
+        public static HashSet<string> UniqueSimilarities = new HashSet<string>();
+
         static void Main()
         {
             Dictionary<string, double[]> cuisDictionary = LoadData();
 
             DateTime dt1 = DateTime.Now;
-
-            string providerDescriptionInputText = "Small-incision phacoemulsification cataract surgery, minor in-office procedures including small eyelid anomalies and chalazion excisions and laser surgical procedures for secondary cataracts, glaucoma and diabetic complications Special Interests General ophthalmology including cataract surgery, glaucoma and diabetic care.";
-            CuiEntities providerCuiEntities = NuClient.ExtractCuiEntities(providerDescriptionInputText); //235 entities
+            List<Provider> providers = ReadProviders("Files\\Provider.tsv"); //191 provider
 
             string patientDescriptionInputText = "Testinq OCT: OD central foveal thickness 200 um nl foveal contour. No SRF/lntraretinal Fluid OS central foveal thickness 166 um nl foveal contour. Pseudohole with ERM, developed after 12/6/17 laser Impression/Plan and Discussion 1 Rhegmatogenous Retinal detachment left eye. sip barricade laser around subretinal fluid. Irecommend that we proceed with scleral buckle to treat detachment and prevent futher posterior PVR (epiretinal membrane) from developing. I discussed staged procedure with scleral buckle with small gas bubble initially, and possible membrane peel in the future. I recommend that we proceed with surgery 12/29/17 with buckle and small gas bubble with 3-4 days of face down positioning to help With resolution of macular subretinal fluid. I discussed that it is unclear whether her scotoma is related to the detachment or the laser, but that fixing the detachment will minimize the progression of ERM 2. Limited peripheral rhegmatogenous retinal detachment right eye. sip laser barricade 12/6/17. No further tears noted. plan dilated exam OD at the time of surgery OS. 3. High myopia both eyes. The clinical findings noted were reviewed in detail. Printed information was provided. The patient expressed an understanding of this explanation and further expressed a desire to proceed in the manner outlined. Follow up scheduled for 12.29.17 cryo, scleral buckle with gas left eye. Allerqies. Medications and Problem list Problems Medical History: None Allerqies";
             CuiEntities patientCuiEntities = NuClient.ExtractCuiEntities(patientDescriptionInputText); //270 entities
 
-            StringBuilder sb = ExtractSimilarities(providerCuiEntities, patientCuiEntities, cuisDictionary);
-            Console.WriteLine(sb.ToString());
+            foreach (Provider provider in providers)
+            {
+                string k = provider.Keywords;
+                CuiEntities providerCuiEntities = NuClient.ExtractCuiEntities(k); //235 entities
+                var topFiveResults = ExtractSimilarities(providerCuiEntities, patientCuiEntities, cuisDictionary);
+                PrintSimilarities(topFiveResults);
+            }
 
+            //string providerDescriptionInputText = "Small-incision phacoemulsification cataract surgery, minor in-office procedures including small eyelid anomalies and chalazion excisions and laser surgical procedures for secondary cataracts, glaucoma and diabetic complications Special Interests General ophthalmology including cataract surgery, glaucoma and diabetic care.";
+            //CuiEntities providerCuiEntities = NuClient.ExtractCuiEntities(providerDescriptionInputText); //235 entities
+            //StringBuilder sb = ExtractSimilarities(providerCuiEntities, patientCuiEntities, cuisDictionary);
+            //Console.WriteLine(sb.ToString());
+
+            string all = string.Join(", ", UniqueSimilarities);
             DateTime dt3 = DateTime.Now;
             TimeSpan duration2 = dt3.Subtract(dt1);
             Console.WriteLine($"Seconds to rank: {duration2.TotalSeconds}");
         }
 
-        private static StringBuilder ExtractSimilarities(CuiEntities providerCuiEntities, CuiEntities patientCuiEntities,
+        public static List<Similarity> ExtractSimilarities(
+            CuiEntities providerCuiEntities, 
+            CuiEntities patientCuiEntities,
             Dictionary<string, double[]> cuisDictionary)
         {
             List<Similarity> similarities = RankSimilarities(providerCuiEntities, patientCuiEntities, cuisDictionary);
             similarities.Reverse();
-            IEnumerable<Similarity> topFiveResults = similarities.Take(10);
+            List<Similarity> top = similarities.Take(10).ToList();
+            return top;
+        }
+
+        private static void PrintSimilarities(IEnumerable<Similarity> topFiveResults)
+        {
             StringBuilder sb = new StringBuilder();
             HashSet<string> h = new HashSet<string>();
             foreach (Similarity similarity in topFiveResults)
@@ -48,20 +66,19 @@ namespace RankingAndRelevance
                     h.Add(text);
                 }
             }
-            return sb;
         }
 
-        private static Dictionary<string, double[]> LoadData()
+        public static Dictionary<string, double[]> LoadData(string path = "Files\\cui2vec_pretrained.csv")
         {
             DateTime dt = DateTime.Now;
-            List<Patient> patients = ReadPatients("Files\\Patient.tsv"); //280 patients
-            List<Member> members = ReadMembers("Files\\Member.tsv"); //280 members
-            List<PlaceOfService> placeOfServices = ReadPlaceOfService("Files\\PlaceOfService.tsv"); //70 places
-            List<Provider> providers = ReadProviders("Files\\Provider.tsv"); //191 provider
+            //List<Patient> patients = ReadPatients("Files\\Patient.tsv"); //280 patients
+            //List<Member> members = ReadMembers("Files\\Member.tsv"); //280 members
+            //List<PlaceOfService> placeOfServices = ReadPlaceOfService("Files\\PlaceOfService.tsv"); //70 places
+            //List<Provider> providers = ReadProviders("Files\\Provider.tsv"); //191 provider
             //http://ec2-52-14-191-192.us-east-2.compute.amazonaws.com:1234/ 
             //https://arxiv.org/abs/1804.01486 
             //This tab displays an interactive t-sne visualization of all 108,477 concepts. 
-            Dictionary<string, double[]> cuisDictionary = ReadCuiVector("Files\\cui2vec_pretrained.csv"); //109053 CUI entities 
+            Dictionary<string, double[]> cuisDictionary = ReadCuiVector(path); //109053 CUI entities 
             DateTime dt2 = DateTime.Now;
             TimeSpan duration = dt2.Subtract(dt);
             Console.WriteLine("Seconds to load: " + duration.TotalSeconds);
@@ -72,7 +89,6 @@ namespace RankingAndRelevance
             CuiEntities patientCuiEntities, 
             Dictionary<string, double[]> cuisDictionary)
         {
-            HashSet<string> uniqueSimilarities = new HashSet<string>();
             List<Similarity> cosineSimilarites = new List<Similarity>();
             foreach (Entity providerCuiEntity in providerCuiEntities.entities)
             {
@@ -94,9 +110,10 @@ namespace RankingAndRelevance
                         if (cuisDictionary.TryGetValue(patientCuiEntityCui, out patientVector))
                         {
                             string uniqueIds = $"{providerCuiEntityCui} {patientCuiEntityCui}";
-                            if (uniqueSimilarities.Contains(uniqueIds))
+                            if (UniqueSimilarities.Contains(uniqueIds))
                                 continue;
-                            uniqueSimilarities.Add(uniqueIds);
+
+                            UniqueSimilarities.Add(uniqueIds);
 
                             double similarity = CosineSimilairityProgram.CalculateCosineSimilarity(patientVector, providerVector);
                             Similarity s = new Similarity
@@ -139,7 +156,9 @@ namespace RankingAndRelevance
                     lineCounter++;
                     continue; //skip header
                 }
-                string[] values = line.Split(',');
+                char[] comma = new char[] { ',' };
+
+                string[] values = line.Split(comma, StringSplitOptions.RemoveEmptyEntries);
                 string cui = string.Empty;
                 List<double> vector = new List<double>();
 
@@ -276,20 +295,20 @@ namespace RankingAndRelevance
                 string effectiveDt = columns[3];
                 string termDt = columns[4];
                 string facilityName = columns[5];
-                string lastName = columns[6];
-                string firstName = columns[7];
-                string middleName = columns[8];
-                string suffixName = columns[9];
-                string providerSpecialityCode = columns[10];
-                string providerSpecialityDesc = columns[11];
-                string providerCity = columns[12];
-                string providerCounty = columns[13];
-                string providerState = columns[14];
-                string deaNumber = columns[15];
-                string stateLicense = columns[16];
-                string taxId = columns[17];
-                string createTimestamp = columns[18];
-                string modifyTimestamp = columns[19];
+                string lastName = columns[5];
+                string firstName = columns[6];
+                string middleName = columns[7];
+                string suffixName = columns[8];
+                string providerSpecialityCode = columns[9];
+                string providerSpecialityDesc = columns[10];
+                string providerCity = columns[11];
+                string providerCounty = columns[12];
+                string providerState = columns[13];
+                string zip = columns[14];
+                string deaNumber = columns[16];
+                string stateLicense = columns[17];
+                string taxId = columns[18];
+                string createTimestamp = columns[19];
                 string keywords = columns[20];
                 string price = columns[21];
 
@@ -309,11 +328,11 @@ namespace RankingAndRelevance
                     ProviderCity = providerCity,
                     ProviderCounty = providerCounty,
                     ProviderState = providerState,
+                    ProviderZip = zip,
                     DeaNumber = deaNumber,
                     StateLicense = stateLicense,
                     TaxId = taxId,
                     CreateTimestamp = createTimestamp,
-                    ModifyTimestamp = modifyTimestamp,
                     Keywords = keywords,
                     Price = price,
                 };

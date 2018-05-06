@@ -1,6 +1,10 @@
-﻿namespace RankingAndRelevance
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+
+namespace RankingAndRelevance
 {
-    public class Provider
+    public class Provider : IEquatable<Provider>, IComparable<Provider>
     {
         public string PrvIdn { get; set; }
         public string ProviderNpi { get; set; }
@@ -24,5 +28,42 @@
         public string ModifyTimestamp { get; set; }
         public string Keywords { get; set; }
         public string Price { get; set; }
+        public string Distance { get; set; }
+        public List<string> Matches = new List<string>();
+
+        public double AverageMatchRank;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            Provider objAsPart = obj as Provider;
+            if (objAsPart == null) return false;
+            else return Equals(objAsPart);
+        }
+
+        public int SortByRankAscending(double rank1, double rank2)
+        {
+            return rank1.CompareTo(rank2);
+        }
+
+        // Default comparer for Part type.
+        public int CompareTo(Provider compareSimilarity)
+        {
+            // A null value means that this object is greater.
+            if (compareSimilarity == null)
+                return 1;
+            else
+                return this.AverageMatchRank.CompareTo(compareSimilarity.AverageMatchRank);
+        }
+        public override int GetHashCode()
+        {
+            return PrvIdn.GetHashCode();
+        }
+
+        public bool Equals(Provider other)
+        {
+            if (other == null) return false;
+            return (this.AverageMatchRank.Equals(other.AverageMatchRank));
+        }
     }
 }

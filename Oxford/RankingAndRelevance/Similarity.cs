@@ -16,14 +16,8 @@ namespace RankingAndRelevance
         {
         }
 
-        /// <summary>
-        /// C0000052
-        /// </summary>
         public string ProviderSurfaceForm { get; set; }
 
-        /// <summary>
-        /// C0000163
-        /// </summary>
         public string PatientSurfaceForm { get; set; }
 
         /// <summary>
@@ -35,6 +29,7 @@ namespace RankingAndRelevance
         {
             return $"ProviderSurfaceForm: {ProviderSurfaceForm} PatientSurfaceForm: {PatientSurfaceForm}";
         }
+
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
@@ -45,7 +40,7 @@ namespace RankingAndRelevance
 
         public int SortByRankAscending(double rank1, double rank2)
         {
-            return rank1.CompareTo(rank2);
+            return rank2.CompareTo(rank1);
         }
 
         // Default comparer for Part type.
@@ -57,6 +52,7 @@ namespace RankingAndRelevance
             else
                 return this.Rank.CompareTo(compareSimilarity.Rank);
         }
+
         public override int GetHashCode()
         {
             return int.Parse(s: Rank.ToString(CultureInfo.InvariantCulture)) ^ PatientSurfaceForm.Length ^ ProviderSurfaceForm.Length;
